@@ -3,11 +3,12 @@ var keys = require("./keys.js");
 var request = require('request');
 var Spotify = require('node-spotify-api');
 var fs = require('fs');
-var input = process.argv;
-var action = input[2];
-var inputs = input[3];
+
 
 function switchCase() {
+    var input = process.argv;
+    var action = input[2];
+    var inputs = input.slice(3).join(" ");
     switch (action) {
         case "concert-this":
             concert(inputs);
@@ -92,21 +93,22 @@ function spotify(inputs) {
  * ombd movie reviews
  * the input is manully input, so it will show you 
  * title, release year, ratings, country, language, plot, and actors
+ * having issue with most of the information loading
  */
 function movie(inputs) {
-
+    if (!inputs) {
+        inputs = 'Mr. Nobody';
+    }
     const queryUrl = "http://www.omdbapi.com/?t=" + inputs + "&y=&plot=short&apikey=trilogy";
 
     request(queryUrl, function (error, response, body) {
-        if (!inputs) {
-            inputs = 'Mr. Nobody';
-        }
-        if (!error && response.statusCode === 200) {
 
+        if (!error && response.statusCode === 200) {
+            console.log(body);
             console.log("Title: " + JSON.parse(body).Title);
             console.log("Release Year: " + JSON.parse(body).Year);
             console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
-            console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1]);
+            console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
             console.log("Country: " + JSON.parse(body).Country);
             console.log("Language: " + JSON.parse(body).Language);
             console.log("Plot: " + JSON.parse(body).Plot);
@@ -143,8 +145,11 @@ function whatItSays() {
         }
     });
 }
+
+
 // calling functions
 
 // concert();
-// movie();
+// movie("");
+// spotify();
 // whatItSays();
