@@ -36,10 +36,11 @@ switchCase();
 
 function concert(inputs) {
 
-    const bandUrl = "https://rest.bandsintown.com/artists/" + inputs + "/events?app_id=codingbootcamp"
     if (!inputs) {
         inputs = 'The Sign';
     }
+    const bandUrl = "https://rest.bandsintown.com/artists/" + inputs + "/events?app_id=codingbootcamp"
+    
     request(bandUrl, function (error, response, body) {
 
         if (!error && response.statusCode === 200) {
